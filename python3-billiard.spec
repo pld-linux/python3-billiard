@@ -7,27 +7,26 @@
 Summary:	Multiprocessing Pool Extensions
 Summary(pl.UTF-8):	Rozszerzenia puli procesów
 Name:		python3-%{module}
-Version:	4.2.1
+Version:	4.2.2
 Release:	1
 License:	BSD
 Group:		Libraries/Python
 #Source0Download: https://pypi.org/simple/billiard/
 Source0:	https://files.pythonhosted.org/packages/source/b/billiard/%{module}-%{version}.tar.gz
-# Source0-md5:	67dfb22a28126cfdbfe9f8e0bcdc177d
+# Source0-md5:	1a8af97920c18df4480ffc1515273f6c
 URL:		https://github.com/celery/billiard
+BuildRequires:	python3-devel >= 1:3.7
+BuildRequires:	python3-setuptools >= 1:59.2.0
+%if %{with tests}
+BuildRequires:	python3-psutil >= 5.9.0
+BuildRequires:	python3-pytest >= 6.2
+%endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.752
 %if %{with doc}
 BuildRequires:	sphinx-pdg-3
 %endif
-BuildRequires:	python3-devel >= 1:3.5
-BuildRequires:	python3-setuptools >= 1:40.0.0
-%if %{with tests}
-BuildRequires:	python3-case >= 1.3.1
-BuildRequires:	python3-psutil >= 5.8.0
-BuildRequires:	python3-pytest
-%endif
-Requires:	python3-modules >= 1:3.5
+Requires:	python3-modules >= 1:3.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -69,10 +68,8 @@ PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
 %endif
 
 %if %{with doc}
-cd Doc
-PYTHONPATH=$(pwd)/../build-3/lib \
-sphinx-build-3 -b html -d .build/doctrees . .build/html
-cd ..
+PYTHONPATH=$(pwd) \
+sphinx-build-3 -b html -d Doc/.build/doctrees Doc Doc/.build/html
 %endif
 
 %install
